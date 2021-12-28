@@ -20,7 +20,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     private String filesPath;
 
     @Bean
-    public MultipartConfigElement multipartConfigElement(){
+    public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
         //文件最大KB,MB
         factory.setMaxFileSize("1024MB");
@@ -31,18 +31,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        if(filesPath.equals("") || filesPath.equals("${cbs.filesPath}")){
-            String imagesPath = WebAppConfig.class.getClassLoader().getResource("").getPath();
-            if(imagesPath.indexOf(".jar")>0){
-                imagesPath = imagesPath.substring(0, imagesPath.indexOf(".jar"));
-            }else if(imagesPath.indexOf("classes")>0){
-                imagesPath = "file:"+imagesPath.substring(0, imagesPath.indexOf("classes"));
-            }
-            imagesPath = imagesPath.substring(0, imagesPath.lastIndexOf("/"))+"/images/";
-            filesPath = imagesPath;
-        }
         registry.addResourceHandler("/files/**").addResourceLocations(filesPath);
-        System.out.print("上传配置类filesPath=="+ filesPath +"\n");
+        System.out.print("上传配置类filesPath==" + filesPath + "\n");
         super.addResourceHandlers(registry);
     }
 }

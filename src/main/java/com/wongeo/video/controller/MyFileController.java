@@ -1,5 +1,7 @@
 package com.wongeo.video.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.wongeo.video.model.Video;
 import com.wongeo.video.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,20 @@ import java.util.List;
 @Controller
 public class MyFileController {
 
-    @Autowired
-    private VideoService videoService;
+    final private VideoService videoService;
 
     private String url;
+
+    @Autowired
+    public MyFileController(VideoService service) {
+        videoService = service;
+    }
+
+    //访问路径为：http://localhost:8080/file
+    @RequestMapping("/file")
+    public String file(){
+        return "/file";
+    }
 
     @RequestMapping(value = "/uploadFile", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -35,17 +47,11 @@ public class MyFileController {
         }
         // 获取文件名
         String fileName = file.getOriginalFilename();
-
         fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + fileName;
-        System.out.print("（加个时间戳，尽量避免文件名称重复）保存的文件名为: " + fileName + "\n");
-
-
         //加个时间戳，尽量避免文件名称重复
         String path = "/Users/feng/updateFiles/" + fileName;
-        //String path = "E:/fileUpload/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + fileName;
         //文件绝对路径
         System.out.print("保存文件绝对路径" + path + "\n");
-
         //创建文件路径
         File dest = new File(path);
         //判断文件是否已经存在
@@ -60,7 +66,7 @@ public class MyFileController {
             //上传文件
             file.transferTo(dest); //保存文件
             System.out.print("保存文件路径" + path + "\n");
-            url = "http://localhost:8080/images/" + fileName;//本地运行项目
+            url = "http://localhost:8080/files/" + fileName;//本地运行项目
             int res = videoService.insertUrl(fileName, path, url);
             System.out.print("插入结果" + res + "\n");
             System.out.print("保存的完整url====" + url + "\n");
@@ -68,16 +74,22 @@ public class MyFileController {
         } catch (IOException e) {
             return "上传失败";
         }
-
-        return "上传成功,文件url==" + url;
+        JSONObject object = new JSONObject();
+        object.put("code", "200");
+        object.put("msg", "success");
+        object.put("url", url);
+        return object.toString();
     }
 
     //查询
     @RequestMapping("/list")
+    @ResponseBody
     public String list(Model model) {
         List<Video> videos = videoService.getVideos();
         model.addAttribute("Videos", videos);
-        return "list";
+        JSONObject object = new JSONObject();
+        object.put("code", "200");
+        object.put("data", JSON.toJSON(videos));
+        return object.toString();
     }
-
 }
