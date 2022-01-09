@@ -40,7 +40,7 @@ public class VideoService {
     //查询
     public List<Video> getVideos() {
         List<Video> videos = new ArrayList<>();
-        File[] files = new File(fileDir2).listFiles();
+        File[] files = new File(fileDir1).listFiles();
         for (int i = 0; i < files.length; i++) {
             File file = files[i];
             String url = getUrl(file.getName());

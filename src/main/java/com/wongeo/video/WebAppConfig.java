@@ -29,10 +29,15 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         return factory.createMultipartConfig();
     }
 
+    private String getFilesPath() {
+        String filesPath1 = filesPath;
+        String filesPath2 = "F:\\迅雷下载\\a";
+        return filesPath2;
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/files/**").addResourceLocations(filesPath);
-        System.out.print("上传配置类filesPath==" + filesPath + "\n");
+        registry.addResourceHandler("/files/**").addResourceLocations(getFilesPath());
         super.addResourceHandlers(registry);
     }
 }
