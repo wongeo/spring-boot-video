@@ -19,6 +19,9 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Value("${cbs.filesPath}")
     private String filesPath;
 
+    @Value("${cbs.filesPath2}")
+    private String filesPath2;
+
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
@@ -29,15 +32,17 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         return factory.createMultipartConfig();
     }
 
-    private String getFilesPath() {
-        String filesPath1 = filesPath;
-        String filesPath2 = "F:\\迅雷下载\\a";
-        return filesPath2;
-    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/files/**").addResourceLocations(getFilesPath());
+        String os = System.getProperty("os.name");
+        if(os.toLowerCase().startsWith("win")){
+            registry.addResourceHandler("/files/**")
+                    .addResourceLocations(filesPath2);
+        }else {
+            registry.addResourceHandler("/files/**")
+                    .addResourceLocations(filesPath);
+        }
+
         super.addResourceHandlers(registry);
     }
 }

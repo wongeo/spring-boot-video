@@ -1,6 +1,7 @@
 package com.wongeo.video.service;
 
 import com.wongeo.video.model.Video;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -33,19 +34,20 @@ public class VideoService {
         return "http://" + address.getHostAddress() + ":8080/files/" + name;
     }
 
-    private String fileDir1 = "/Users/feng/updateFiles/";
-    private String fileDir2 = "F:\\迅雷下载\\a";
-
+    @Value("F:/Downloads/a/")
+    private String filesPath;
 
     //查询
     public List<Video> getVideos() {
         List<Video> videos = new ArrayList<>();
-        File[] files = new File(fileDir1).listFiles();
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-            String url = getUrl(file.getName());
-            Video video = new Video(i, file.getName(), url);
-            videos.add(video);
+        File[] files = new File(filesPath).listFiles();
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                File file = files[i];
+                String url = getUrl(file.getName());
+                Video video = new Video(i, file.getName(), url);
+                videos.add(video);
+            }
         }
         return videos;
     }
