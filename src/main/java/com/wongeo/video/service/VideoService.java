@@ -15,8 +15,14 @@ import java.util.List;
 @Component
 public class VideoService {
 
-    public VideoService() throws UnknownHostException {
+    @Value("${cbs.ip}")
+    private String ip;
 
+    public VideoService() throws UnknownHostException {
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            ip = address.getHostAddress();
+        }
     }
 
     //插入
@@ -27,7 +33,7 @@ public class VideoService {
     private InetAddress address = InetAddress.getLocalHost();
 
     private String getUrl(String name) {
-        return "http://" + address.getHostAddress() + ":8080/files/" + name;
+        return "http://" + ip + ":8080/files/" + name;
     }
 
     @Value("F:/Downloads/a/")
