@@ -19,10 +19,7 @@ public class VideoService {
     private String ip;
 
     public VideoService() throws UnknownHostException {
-        String os = System.getProperty("os.name");
-        if (os.toLowerCase().startsWith("win")) {
-            ip = address.getHostAddress();
-        }
+
     }
 
     //插入
