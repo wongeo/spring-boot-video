@@ -16,15 +16,11 @@ import java.util.List;
 public class VideoService {
 
     public VideoService() throws UnknownHostException {
+
     }
 
     //插入
     public int insertUrl(String name, String path, String url) {
-        System.out.print("开始插入=name==" + name + "\n");
-        System.out.print("开始插入=path==" + path + "\n");
-        System.out.print("开始插入=url==" + url + "\n");
-        int res = 0;
-        System.out.print("插入结果===" + res + "\n");
         return 0;
     }
 
@@ -37,10 +33,21 @@ public class VideoService {
     @Value("F:/Downloads/a/")
     private String filesPath;
 
+    private String getFilesPath() {
+        String filesPath;
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            filesPath = "F:/Downloads/a/";
+        } else {
+            filesPath = "/Users/feng/updateFiles/";
+        }
+        return filesPath;
+    }
+
     //查询
     public List<Video> getVideos() {
         List<Video> videos = new ArrayList<>();
-        File[] files = new File(filesPath).listFiles();
+        File[] files = new File(getFilesPath()).listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
