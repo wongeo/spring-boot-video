@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+
+        video {
+            margin: 0 auto;
+            width: 99%;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <video
+            :src="info.url"
+            controls="controls"
+            autoplay="autoplay">
+    </video>
+    <img :src="info.cover" alt="缩略图"/>
+</div>
+
+<!--引入vvue-->
+<script src="https://unpkg.com/vue@3.2.33/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
+<script>
+    const app = {
+        data() {
+            console.info("data")
+            return {
+                info: {
+                    cover: "",
+                    name: "",
+                    id: 0,
+                    url: ""
+                },
+                player: null,
+                playTime: '',
+                seekTime: '',
+                current: ''
+            }
+        }, methods: {
+            aaa() {
+                alert("ajfiejifejfie")
+            },
+            add2() {
+                console.info("aaaa")
+            }
+        }, mounted() {
+            let url = window.location.href;
+            let p = url.split('?')[1]
+            let params = new URLSearchParams(p)
+            let name = params.get("name")
+
+            axios.get("http://localhost:8080/get?name=" + name).then((response) => {
+                console.info(response.data);
+                this.info = response.data.data[0]
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    }
+    Vue.createApp(app).mount('#app')
+</script>
+</body>
+</html>

@@ -5,6 +5,7 @@ public class Video {
     private int id;
     private String name;
     private String url;
+    private String cover;
 
     public Video() {
 
@@ -40,4 +41,11 @@ public class Video {
         this.url = url;
     }
 
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public String getCover() {
+        return cover;
+    }
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+    <style>
+        .box {
+            display: flex;
+            flex-wrap: wrap;
+            width: auto;
+            height: auto;
+        }
+
+        .item {
+            margin: 10px;
+            width: 400px;
+            height: auto;
+            display: grid;
+            border: 1px solid #6666;
+        }
+
+        .item video {
+            width: 400px;
+            height: 400px;
+        }
+
+        .item img {
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="app">
+    <div class="box">
+        <div class="item" v-for="item in info.data" @click="greet(item)">
+            <img :src="item.cover" alt="封皮"/>
+            <h4>{{item.name}}</h4>
+        </div>
+    </div>
+
+</div>
+</body>
+<!--引入vue-->
+<script src="https://unpkg.com/vue@3.2.33/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
+<script type="text/javascript">
+    const app = {
+        data() {
+            console.info("data")
+            return {
+                info: {},
+            }
+        }, mounted() {
+            axios.get("http://localhost:8080/list").then((response) => {
+                console.info(response.data);
+                this.info = response.data
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }, methods: {
+            //自定义函数
+            greet(item) {
+                window.location.href = "/play?name=" + item.name
+            }
+            , enter(item) {
+                console.log(item.cover)
+            }, out(item) {
+                console.log(item.cover)
+            }
+        }
+    }
+    Vue.createApp(app).mount('#app')
+</script>
+</html>

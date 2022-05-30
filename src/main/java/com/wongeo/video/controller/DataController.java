@@ -7,11 +7,13 @@ import com.wongeo.video.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -20,22 +22,17 @@ import java.util.List;
 
 
 @Controller
-public class MyFileController {
+public class DataController {
 
     final private VideoService videoService;
 
     private String url;
 
     @Autowired
-    public MyFileController(VideoService service) {
+    public DataController(VideoService service) {
         videoService = service;
     }
 
-    //访问路径为：http://localhost:8080/file
-    @RequestMapping("/file")
-    public String file(){
-        return "/file";
-    }
 
     @RequestMapping(value = "/uploadFile", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -81,12 +78,25 @@ public class MyFileController {
         return object.toString();
     }
 
+
     //查询
     @RequestMapping("/list")
     @ResponseBody
-    public String list(Model model) {
+    @CrossOrigin
+    public String list() {
         List<Video> videos = videoService.getVideos();
-        model.addAttribute("Videos", videos);
+        JSONObject object = new JSONObject();
+        object.put("code", "200");
+        object.put("data", JSON.toJSON(videos));
+        return object.toString();
+    }
+
+    @RequestMapping("/get")
+    @ResponseBody
+    @CrossOrigin
+    public String get(HttpServletRequest request) {
+        String name = request.getParameter("name");
+        List<Video> videos = videoService.getVideos(name);
         JSONObject object = new JSONObject();
         object.put("code", "200");
         object.put("data", JSON.toJSON(videos));
