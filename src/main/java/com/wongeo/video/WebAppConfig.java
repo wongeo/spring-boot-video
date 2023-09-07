@@ -40,7 +40,7 @@ public class WebAppConfig implements WebMvcConfigurer {
             registry.addResourceHandler("/**").addResourceLocations(filesPathForWin);
             registry.addResourceHandler("/files/**").addResourceLocations(filesPathForWin);
         } else {
-            registry.addResourceHandler("**").addResourceLocations(filesPathForMac);
+            registry.addResourceHandler("/**").addResourceLocations(filesPathForMac);
             registry.addResourceHandler("/files/**").addResourceLocations(filesPathForMac);
         }
     }
